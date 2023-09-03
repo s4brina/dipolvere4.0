@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+<html class="cinema">
+<head>
+    <title>Website</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="style.css" />
+
+    <style>
+        ul#navList li {
+            transform: translate(200%, 200%);
+        }
+        </style>
+
+</head>
+<body>
+    <header id="header">
+        <div class="inner">
+            <!-- Logo -->
+            <div class="container2">
+                <a href="index.html" class="logo">
+                    <span class="symbol"><img src="images/logo.png" alt="" /></span>
+                </a>
+            </div>
+            <div class="container2">
+                <button id="refreshButton"> <img id="refreshImage" src="images/refreshbutton(white).png" alt="refresh"></button>
+            </div>
+
+            <!-- Nav -->
+            <ul id="navList" class="dark_ul">
+                <li class="dark_li image-mirror"><a href="cinema_mirror.html" class="dark_a">Mirror</a></li>
+                <li class="dark_li image-jetee"><a href="la_jetee.html" class="dark_a">La Jetee</a></li>
+                <li class="dark_li image-soleil"><a href="cinema_sans_soleil.html" class="dark_a">Sans Soleil</a></li>
+                <li class="dark_li image-ashes"><a href="cinema_ashes.html" class="dark_a">Ashes</a></li>
+            </ul>
+        </div>
+    </header>
+    <main class="main-content">
+        <!-- Your main content goes here -->
+    </main>
+    <footer>
+        <p class="footer">© 2023 FiLM di POLVERE | All Rights Reserved.</p>
+    </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const refreshButton = document.getElementById("refreshButton");
+            const navList = document.getElementById("navList");
+            const listItems = Array.from(navList.getElementsByTagName("li"));
+            const buffer = 400; // Adjust this buffer value as needed
+
+            function getRandomPosition(item) {
+                const maxX = window.innerWidth - item.offsetWidth;
+                const footer = document.querySelector("footer");
+                const footerHeight = footer.offsetHeight;
+                const maxY = window.innerHeight - item.offsetHeight - footerHeight - buffer;
+
+                const randomX = Math.max(0, Math.floor(Math.random() * maxX));
+                const randomY = Math.max(0, Math.floor(Math.random() * maxY));
+                return { x: randomX, y: randomY };
+            }
+
+            refreshButton.addEventListener("click", function () {
+                const existingPositions = [];
+                listItems.forEach(item => {
+                    let newPosition;
+                    do {
+                        newPosition = getRandomPosition(item);
+                    } while (existingPositions.some(pos => isOverlapping(pos, newPosition)));
+                    item.style.transform = `translate(${newPosition.x}px, ${newPosition.y}px)`;
+                    existingPositions.push(newPosition);
+                });
+            });
+
+            function isOverlapping(pos1, pos2) {
+                const dx = pos1.x - pos2.x;
+                const dy = pos1.y - pos2.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                return distance < 70; // Adjust this threshold as needed
+            }
+
+            // Initial random positioning
+            refreshButton.click();
+        });
+    </script>
+</body>
+</html>
